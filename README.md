@@ -1,2 +1,196 @@
 # UbiOne
-RPI HAT that combines a STM32F411, sensors and a Mini-PCIe socket for LTE connectivity
+
+
+* [Introduction](https://github.com/Ubiqu0/UbiOne/#introduction)<br>
+* [Upload sketchs](https://github.com/Ubiqu0/UbiOne/#upload-sketchs)<br>
+  * [DFU](https://github.com/Ubiqu0/UbiOne/#dfu)<br>
+  * [SWD](https://github.com/Ubiqu0/UbiOne/#swd)<br>
+  * [Serial](https://github.com/Ubiqu0/UbiOne/#serial)<br>
+* [Pinout](https://github.com/Ubiqu0/UbiOne/#pinout)<br>
+* [RPI](https://github.com/Ubiqu0/UbiOne/#rpi)<br>
+* [mPCIe](https://github.com/Ubiqu0/UbiOne/#mpcie)<br>
+* [Peripherals](https://github.com/Ubiqu0/UbiOne/#peripherals)<br>
+  * [I2S Microphone](https://github.com/Ubiqu0/UbiOne/#i2s-microphone)<br>
+  * [Buzzer](https://github.com/Ubiqu0/UbiOne/#buzzer)<br>
+  * [IMU and Pressure sensor](https://github.com/Ubiqu0/UbiOne/#imu-and-pressure-sensor)<br>
+
+
+# Introduction
+
+**UbiOne** is a Raspberry Pi HAT that combines a **STM32F411CE**, a set of **sensors** and a Mini-PCIe socket to provide **LTE** connectivity to your RPI.
+
+It includes an IMU (**ICM-20689**), a pressure sensor (**SPL06-001** that is equivalent to DPS310 sensor), an I2S microphone (**SPH0645**), and a small passive buzzer (**KLJ-4020**).
+
+Furthermore, it manages the RPI power supply, which mean you can completely shutdown the RPI and have a true long-term sleep mode.
+
+**UbiOne** was designed having in mind the use of [ubiquo.net](https://ubiquo.net), a web application that allows you to control your DIY bot remotely via web browser (currently as a demo only).
+
+
+![UbiOne_v0.8](https://github.com/Ubiqu0/UbiOne/blob/main/hardware/UbiOne_v0.8.png)
+
+------
+
+# Geting Started
+
+You can use Arduino IDE to program and upload sketchs, using [Arduino Core for STM32](https://github.com/stm32duino/Arduino_Core_STM32). You can follow these [steps](https://github.com/stm32duino/wiki/wiki/Getting-Started) to install the STM32 libraries or, very shortly:
+
+- Open Arduino "**Preferences**" and add the following link to "**Additional Boards Manager URLs**":
+```
+https://github.com/stm32duino/BoardManagerFiles/raw/main/package_stmicroelectronics_index.json
+```
+1. Go to "**Tools > Board > Board Manager**" and search for "**STM32**".
+2. Install the package "**STM32 MCU based boards**".
+3. Install [STM32CubeProgrammer](https://www.st.com/en/development-tools/stm32cubeprog.html).
+
+Select the STM32 board type and respective configuration:
+
+1. Go to "**Tools > Board > STM32 Boards groups > Generic STM32F4 series**".
+2. Select the board part number "**Tools > Board > Board part number**" and select "**Generic F411CEUx**".
+3. Enable serial to be able to print to the Serial Monitor: "**Tools > U(S)ART support: Enabled (generical 'Serial')**"
+4. Enable "**USB support (if available): CDC (generical 'Serial'...)**"
+
+In the end you should have the following configuration:
+
+------
+
+# Upload sketchs
+
+You can upload sketches to from three different ways: DFU, SWD and Serial.
+
+## DFU
+
+To compile and upload in **DFU mode** go to "**Tools > Upload method > STM32CubeProgrammer (DFU)**".
+
+Now, just follow the next steps:
+
+  1. Plug in your PC to the UbiOne **STM32** USB-C port.
+  2. Put the STM32 MCU in boot mode by:
+      1. pressing and holding **BOOT**,
+      2. press and release **NRST**
+      3. release **BOOT**.
+  3. Arduino IDE is now ready to compile and upload (click upload in Arduino IDE).
+
+## SWD
+
+To compile and upload in **SWD mode** go to "**Tools > Upload method > STM32CubeProgrammer (SWD)**". To program via SWD you need a ST-LINK/V2, that can be the [official](https://www.st.com/content/st_com/en/products/development-tools/hardware-development-tools/hardware-development-tools-for-stm32/st-link-v2.html) or a smaller (and cheaper) version like this one:
+
+![Screen Shot 2021-11-24 at 11 11 21](https://user-images.githubusercontent.com/7373193/143227929-663da6c6-d013-44a5-9de1-07ea58ddc182.png)
+
+
+When uploading via SWD you don't need to put the STM32 in boot mode. All you need is to connect the pins:
+
+  - **GND**
+  - **SWDIO**
+  - **SWCLK**
+  - **3.3V** (optional: you should connect only in case you are powering the UbiOne through the ST-LINK/V2)
+
+
+## Serial
+
+A third option is to program through Serial, using, for example, an FTDI USB UART converter like this one:
+
+![Screen Shot 2021-11-24 at 17 13 34](https://user-images.githubusercontent.com/7373193/143284618-a39b0a6f-5fe8-471d-96d9-1667574d1b42.png)
+
+
+To compile and upload in **UART mode** go to "**Tools > Upload method > STM32CubeProgrammer (Serial)**". 
+
+Next, follow the steps:
+  1. Connect the pins:
+     1. RX to A9
+     2. TX to A10
+     3. GND to GND
+     4. 3.3V to 3.3V or 5V to 5V (it depends on the option you have selected in the FTDI converter)
+  2. Put the STM32 MCU in boot mode by
+      1. pressing and holding **BOOT**,
+      2. press and release **NRST**
+      3. release **BOOT**.
+  3 Arduino IDE is now ready to compile and upload (click upload in Arduino IDE).
+
+---
+# Pinout
+
+The following table shows the STM32F411 pins available through the pin headers.
+
+
+
+| STM32  |
+| :-----:|
+| PB9  |
+| PB8  |
+| PA3  |
+| PA2  |
+| PB5  |
+| PB4  |
+| PB12  |
+| PB15  |
+| PB10  |
+| PB12  |
+
+
+You can find more details about in the [datasheet](https://www.st.com/en/microcontrollers-microprocessors/stm32f411ce.html). You can also use [STM32CubeMX](https://www.st.com/en/development-tools/stm32cubemx.html) (search for STM32F411CEU).
+
+---
+# RPI
+
+UbiOne can be interfaced with the 40-pin RPI header.
+
+| STM32 |  RPI GPIO | RPI Pin |
+| :-----: | :-----: |  :-----: |
+| PB9  | GPIO2 (SJ5) | 3 |
+| PB8  | GPIO3 (SJ6) | 5 |
+| PA3  | GPIO14 | 8 |
+| PA2  | GPIO15 | 10 |
+| PB5  | GPIO10 | 19 |
+| PB4  | GPIO9 | 21 |
+| PB12  | GPIO11  | 23 |
+| PB15  | GPIO20 (SJ1) | 38 |
+| PB10  | GPIO18 (SJ2) | 12 |
+| PB12  | GPIO19 (SJ3) | 35 |
+
+
+SJ* means a solder jumper.  By default, they are not connected, and therefore you need to solder it in case of use.
+
+As the table shows, **UbiOne** can communicate directly with the RPI via UART pins (GPIO14 and GPIO15). Please note that to do so, you need to first configure the RPI:
+
+1. Go to the RPI system configuration menu by typing ```sudo raspi-config``` in a terminal.
+2. Go to "**Interface Options > Serial Port**".
+3. Select "**No**" to the first question (related to login).
+4. Select "**Yes**" to the second question to enable serial.
+
+---
+# mPCIe
+
+**UbiOne** can fit a Mini-PCIe 4G card based on the pinout of a [Quectel LTE EC25 Mini PCIe](https://www.quectel.com/product/lte-ec25-mini-pcie-series). Therefore, in case you use any other card, you should pay attention if it respects the same pin configuration.
+
+| STM32 |  mPCIe function | mPCIe pin |
+| :-----: | :-----: |  :-----: |
+| PA10 | TX | 13 |
+| PA9  | RX | 11 |
+| PA8 | RI | 17 |
+| PA15 | DTR | 31 |
+| PA4 (SJ4) | WAKE | 1 |
+| PA5 (SJ7) | W_DISABLE | 20 |
+
+---
+# Peripherals
+
+## I2S Microphone
+
+UbiOne incorporates an I2S microphone. The setup is the same as the [I2S MEM Microphone board from Adafruit](https://learn.adafruit.com/adafruit-i2s-mems-microphone-breakout/overview), where the mic is directly connected to RPI through GPIO pins 18,19, and 20. If you need to use the mic with the STM32, you must solder SJ1, SJ2, and SJ3. To use with the RPI just follow the [Adafruit guide](https://learn.adafruit.com/adafruit-i2s-mems-microphone-breakout/raspberry-pi-wiring-test).
+
+**NOTE**: for some reason, the file `~/.asoundrc` keeps getting deleted (related to [this](https://forums.raspberrypi.com/viewtopic.php?t=295008) issue). So if you notice any problem with the microphone, please first check if the file is there.
+
+
+| RPI |  Microphone | STM32 |
+| :-----: | :-----: | :-----: |
+| GPIO18 | BCLK |  PB15 (SJ1) |
+| GPIO19  | WS | PB10 (SJ2) |
+| GPIO20 | DATA | PB12 (SJ3) |
+
+## Buzzer
+
+Since UbiOne has a microphone, it would be nice to have a speaker. However, we think we can agree it would be pretty challenging to add a speaker to this little board. Even so, we added a small buzzer to pin **PB14** that allows playing a simple buzz and some nice tunes.  Try, for example, [this](https://github.com/Ubiqu0/UbiOne/blob/main/examples/buzzer/very_nice_tune.ino) one! :wink:
+
+## IMU and Pressure sensor
+
+Both sensors are connected by I2C through pins **PB9 (SDA)** and **PB8 (SCL)**. The I2C lines can also be connected to the RPI I2C pins **GPIO2** and **GPIO3**. For that, you need to solder **SJ5** and **SJ6**. If you ask why it isn't everything connected, the RPI can only behave as master and does not support I2C multi-master. It results that when connected, you lose the possibility of using the STM32 as a master in an I2C communication.
