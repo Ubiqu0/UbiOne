@@ -140,9 +140,6 @@ UbiOne can be interfaced with the 40-pin RPI header.
 | PB8  | GPIO3 (SJ6) | 5 |
 | PA3  | GPIO14 | 8 |
 | PA2  | GPIO15 | 10 |
-| PB5  | GPIO10 | 19 |
-| PB4  | GPIO9 | 21 |
-| PB12  | GPIO11  | 23 |
 | PB15  | GPIO20 (SJ1) | 38 |
 | PB10  | GPIO18 (SJ2) | 12 |
 | PB12  | GPIO19 (SJ3) | 35 |
@@ -160,7 +157,7 @@ As the table shows, **UbiOne** can communicate directly with the RPI via UART pi
 ---
 # mPCIe
 
-**UbiOne** can fit a Mini-PCIe 4G card based on the pinout of a [Quectel LTE EC25 Mini PCIe](https://www.quectel.com/product/lte-ec25-mini-pcie-series). Therefore, in case you use any other card, you should pay attention if it respects the same pin configuration.
+**UbiOne** can fit a Mini-PCIe card based on the pinout of a [Quectel LTE EC25 Mini PCIe](https://www.quectel.com/product/lte-ec25-mini-pcie-series). In case you use any other card, you should pay attention if it respects the same pin configuration.
 
 | STM32 |  mPCIe function | mPCIe pin |
 | :-----: | :-----: |  :-----: |
@@ -176,21 +173,48 @@ As the table shows, **UbiOne** can communicate directly with the RPI via UART pi
 
 ## I2S Microphone
 
-UbiOne incorporates an I2S microphone. The setup is the same as the [I2S MEM Microphone board from Adafruit](https://learn.adafruit.com/adafruit-i2s-mems-microphone-breakout/overview), where the mic is directly connected to RPI through GPIO pins 18,19, and 20. If you need to use the mic with the STM32, you must solder SJ1, SJ2, and SJ3. To use with the RPI just follow the [Adafruit guide](https://learn.adafruit.com/adafruit-i2s-mems-microphone-breakout/raspberry-pi-wiring-test).
+UbiOne incorporates an I2S microphone. The setup is the same as the [I2S MEM Microphone board from Adafruit](https://learn.adafruit.com/adafruit-i2s-mems-microphone-breakout/overview), where the mic is directly connected to RPI through GPIO pins 18,19, and 20. To use with the RPI just follow the [Adafruit guide](https://learn.adafruit.com/adafruit-i2s-mems-microphone-breakout/raspberry-pi-wiring-test).
 
 **NOTE**: for some reason, the file `~/.asoundrc` keeps getting deleted (related to [this](https://forums.raspberrypi.com/viewtopic.php?t=295008) issue). So if you notice any problem with the microphone, please first check if the file is there.
 
 
-| RPI |  Microphone | STM32 |
-| :-----: | :-----: | :-----: |
-| GPIO18 | BCLK |  PB15 (SJ1) |
-| GPIO19  | WS | PB10 (SJ2) |
-| GPIO20 | DATA | PB12 (SJ3) |
+| RPI |  Microphone | 
+| :-----: | :-----: | 
+| GPIO18 | BCLK |  
+| GPIO19  | WS | 
+| GPIO20 | DATA |
 
 ## Buzzer
 
 Since UbiOne has a microphone, it would be nice to have a speaker. However, we think we can agree it would be pretty challenging to add a speaker to this little board. Even so, we added a small buzzer to pin **PB14** that allows playing a simple buzz and some nice tunes.  Try, for example, [this](https://github.com/Ubiqu0/UbiOne/blob/main/examples/buzzer/very_nice_tune.ino) one! :wink:
 
-## IMU and Pressure sensor
+## IMU 
 
-Both sensors are connected by I2C through pins **PB9 (SDA)** and **PB8 (SCL)**. The I2C lines can also be connected to the RPI I2C pins **GPIO2** and **GPIO3**. For that, you need to solder **SJ5** and **SJ6**. If you ask why it isn't everything connected, the RPI can only behave as master and does not support I2C multi-master. It results that when connected, you lose the possibility of using the STM32 as a master in an I2C communication.
+The IMU sensor (ICM-20689) is by default connected to the STM32F411 through a SPI connection:
+
+| IMU |  STM32 | 
+| :-----: | :-----: | 
+| MISO | PB4 |  
+| MOSI | PB5 |  
+| SCK  | PB3 | 
+| CS | PB12 |
+| INT | PC14 |
+
+However, if you want to use I2C instead you must solder **SJ8**, **SJ9** and **SJ10**. You should also remove resistors **R38** and **R39** to release SCK and MOSI connections from the STM32F411. In this scenario we have the following connections:
+
+| IMU |  STM32 | 
+| :-----: | :-----: | 
+| SDA | PB9 |  
+| SCL | PB8 |  
+
+
+You can also  make readings from the RPI using its I2C ports. For such scenario you must use RPI I2C pins **GPIO2** and **GPIO3**, and solder **SJ5**, **SJ6**. If you ask why it isn't everything connected, the RPI can only behave as master and does not support I2C multi-master. It results that when connected, you lose the possibility of using the STM32 as a master in an I2C communication.
+
+## Pressure sensor
+
+The pressure sensor (SPL06-001) is permantly connected through a I2C connection. Again, if you want to read from the RPI you must solder **SJ5**, **SJ6**.
+
+| SPL06 |  STM32 | 
+| :-----: | :-----: | 
+| SDA | PB9 |  
+| SCL | PB8 |  
