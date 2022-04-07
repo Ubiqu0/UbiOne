@@ -25,7 +25,7 @@ Furthermore, it manages the RPI power supply, which mean you can completely shut
 **UbiOne** was designed having in mind the use of [ubiquo.net](https://ubiquo.net), a web application that allows you to control your DIY bot remotely via web browser (currently as a demo only).
 
 
-![UbiOne_v.9.3](https://github.com/Ubiqu0/UbiOne/blob/main/hardware/UbiOne_board_table.pdf)
+![UbiOne_v.9.3](https://github.com/Ubiqu0/UbiOne/blob/main/hardware/UbiOne_board_table.png)
 
 **IMPORTANTE:** UbiOne is not yet in production! I have a working tested prototype, and I plan to start crowdfunding (e.g., Indiegogo) to fund the production. If you are interested, please fill this with your contact, and I will notify you about the campaign.  
 
