@@ -27,7 +27,10 @@ Furthermore, it manages the RPI power supply, which mean you can completely shut
 
 ![UbiOne_v.9.3](https://github.com/Ubiqu0/UbiOne/blob/main/hardware/UbiOne_board_table_v0.9.3.png)
 
-**IMPORTANTE:** UbiOne is not yet in production! I have a working tested prototype, and I plan to start crowdfunding (e.g., Indiegogo) to fund the production. If you are interested, please fill this with your contact, and I will notify you about the campaign.  
+**IMPORTANT:** UbiOne is not yet in production! I have a working tested prototype, and I plan to start crowdfunding (e.g., Indiegogo) to fund the production. If you are interested, please fill this with your contact, and I will notify you about the campaign.  
+
+
+
 
 ------
 
