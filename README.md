@@ -45,24 +45,29 @@ You can use Arduino IDE to program and upload sketchs, using [Arduino Core for S
 ```
 https://github.com/stm32duino/BoardManagerFiles/raw/main/package_stmicroelectronics_index.json
 ```
-1. Go to "**Tools > Board > Board Manager**" and search for "**STM32**".
-2. Install the package "**STM32 MCU based boards**".
-3. Install [STM32CubeProgrammer](https://www.st.com/en/development-tools/stm32cubeprog.html).
+1. Go to "**Tools > Board > Board Manager**" and search for "**STM32**"
+2. Install the package "**STM32 MCU based boards**"
+3. Install [STM32CubeProgrammer](https://www.st.com/en/development-tools/stm32cubeprog.html)
 
 Select the STM32 board type and respective configuration:
 
-1. Go to "**Tools > Board > STM32 Boards groups > Generic STM32F4 series**".
-2. Select the board part number "**Tools > Board > Board part number**" and select "**Generic F411CEUx**".
+1. Go to "**Tools > Board > STM32 Boards groups > Generic STM32F4 series**"
+2. Select the board part number "**Tools > Board > Board part number**" and select "**Generic F411CEUx**"
 3. Enable serial to be able to print to the Serial Monitor: "**Tools > U(S)ART support: Enabled (generical 'Serial')**"
 4. Enable "**USB support (if available): CDC (generical 'Serial'...)**"
 
 In the end you should have the following configuration:
 
+
+<img width="515" alt="Screenshot 2022-04-09 at 12 48 33" src="https://user-images.githubusercontent.com/7373193/162572820-2bcd1df8-db56-4324-b21e-a6e2f1499c62.png">
+
+
+
 ------
 
 # Upload sketchs
 
-You can upload sketches from three different ways: DFU, SWD and Serial.
+You can upload sketches from three different ways: **DFU**, **SWD** or **Serial**.
 
 ## DFU
 
@@ -70,12 +75,12 @@ To compile and upload in **DFU mode** go to "**Tools > Upload method > STM32Cube
 
 Now, just follow the next steps:
 
-  1. Plug in your PC to the UbiOne **STM32** USB-C port.
+  1. Plug in your PC to **UbiOne** through <ins>STM32 USB-C port</ins>.
   2. Put the STM32 MCU in **programming mode** by:
-      1. pressing and holding **BOOT**,
+      1. pressing and holding **BOOT**
       2. press and release **NRST**
-      3. release **BOOT**.
-  3. Arduino IDE is now ready to compile and upload (click upload in Arduino IDE).
+      3. release **BOOT**
+  3. Arduino IDE is now ready to compile and upload (click upload in Arduino IDE)
 
 ## SWD
 
@@ -106,12 +111,12 @@ Next, follow the steps:
      1. RX to A9
      2. TX to A10
      3. GND to GND
-     4. 3.3V to 3.3V or 5V to 5V (it depends on the option you have selected in the FTDI converter)
+     4. 3.3V to 3.3V or 5V to 5V (it depends on the option you have selected in the FTDI converter).
   2. Put the STM32 MCU in **programming mode** by
-      1. pressing and holding **BOOT**,
+      1. pressing and holding **BOOT**
       2. press and release **NRST**
-      3. release **BOOT**.
-  3 Arduino IDE is now ready to compile and upload (click upload in Arduino IDE).
+      3. release **BOOT**
+  3 Arduino IDE is now ready to compile and upload (click upload in Arduino IDE)
 
 ---
 # Pinout
