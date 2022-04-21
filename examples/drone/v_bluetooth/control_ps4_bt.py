@@ -3,7 +3,7 @@ import asyncio
 # import time,logging,json
 import serial,time
 # import numpy as np
-from yamspy import MSPy
+from yamspy_async import MSPy
 from approxeng.input.selectbinder import ControllerResource
 
 FC_SEND_LOOP_TIME = 0.05
