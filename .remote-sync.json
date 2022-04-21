@@ -1,0 +1,16 @@
+{
+  "uploadOnSave": true,
+  "useAtomicWrites": false,
+  "deleteLocal": false,
+  "hostname": "192.168.1.87",
+  "port": "22",
+  "target": "/home/pi/UbiOne",
+  "ignore": [
+    ".remote-sync.json",
+    ".git/**"
+  ],
+  "username": "pi",
+  "keyfile": "/Users/miguelwon/.ssh/id_rsa",
+  "watch": [],
+  "transport": "scp"
+}
