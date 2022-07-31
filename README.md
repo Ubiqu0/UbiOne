@@ -16,23 +16,23 @@
 
 # Introduction
 
-**UbiOne** is a Raspberry Pi HAT that combines an **STM32F411**, a set of **sensors**, and a **Mini-PCIe socket** to provide **LTE** connectivity to your RPI.
+**UbiOne** is a Raspberry Pi HAT that combines an **STM32F411**, a set of **sensors**, and a **Mini-PCIe socket** to provide **LTE** connectivity to your RPI (through USB and via an LTE card).
 
-It includes an IMU (**ICM-20689**), a pressure sensor (**SPL06-001** that is equivalent to DPS310 sensor), an I2S microphone (**SPH0645**), and a small passive buzzer (**KLJ-4020**).
+It includes an IMU (**BMI270**), a pressure sensor (**DPS310**), an I2S microphone (**SPH0645**), a magnetometer (**QMC5883L**) and a small passive buzzer (**KLJ-4020**).
 
 Furthermore, it manages the RPI power supply, which means you can completely shutdown the RPI and have a **true long-term sleep mode**.
 
 **UbiOne** was designed having in mind the use of [ubiquo.net](https://ubiquo.net), a web application that allows you to control your DIY bot remotely via web browser (currently as a demo only).
 
 
-![UbiOne_v.9.3](https://github.com/Ubiqu0/UbiOne/blob/main/hardware/UbiOne_board_table_v0.9.3.png)
+![UbiOne_v.9.8](https://github.com/Ubiqu0/UbiOne/blob/main/hardware/UbiOne_board_table_v0.9.8.png)
 
 **IMPORTANT:** **UbiOne** is not yet in production! I have a working tested **prototype**, and I plan to start crowdfunding (e.g., Indiegogo) to fund the production. If you are interested, please fill out this [form](https://forms.gle/ZSxchesgbg77n8198) with your contact, and I will notify you about the campaign.  
 
 
 UbiOne  | UbiOne + RPI  | UbiOne + LTE + RPI + Camera |    
 :------:|:------------: |:---------------------------: |
-![](https://github.com/Ubiqu0/UbiOne/blob/main/hardware/ubione.png) | ![](https://github.com/Ubiqu0/UbiOne/blob/main/hardware/ubione_rpi.png) | ![](https://github.com/Ubiqu0/UbiOne/blob/main/hardware/ubione_lte_rpi_camera.png) |
+![](https://github.com/Ubiqu0/UbiOne/blob/main/hardware/ubione.jpg) | ![](https://github.com/Ubiqu0/UbiOne/blob/main/hardware/ubione_rpi.jpg) | ![](https://github.com/Ubiqu0/UbiOne/blob/main/hardware/ubione_lte_rpi_camera.jpg) |
 
 
 ------
