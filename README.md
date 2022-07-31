@@ -157,8 +157,12 @@ As the table shows, **UbiOne** can communicate directly with the RPI via UART pi
 | PA15 | DTR | 31 |
 | PA4 (SJ3) | WAKE | 1 |
 | PA5 (SJ4) | W_DISABLE | 20 |
+| PA13 | W_RST | 22 | 
 
-If you need to use WAKE and W_DISABLE functions you must solder **SJ3** and **SJ4**.
+
+If you need to use WAKE and W_DISABLE functions you must solder **SJ3** and **SJ4**. 
+
+You can reset the LTE module by pressing the **W_RST** or drive **PA13** pin low between 100 and 500 ms. Also, please note that PA13 is also SWDIO pin, which means you should not have the LTE module connected if uploading the STM32 via SWD. 
 
 ## I2S Microphone
 
