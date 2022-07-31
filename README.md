@@ -205,9 +205,9 @@ You can also  make readings from the RPI using its I2C port. For such scenario y
 
 ## Pressure sensor
 
-The pressure sensor (SPL06-001) is permantly connected through a I2C connection. Again, if you want to read from the RPI you must solder **SJ1**, **SJ2**.
+The pressure sensor (DPS310) is permantly connected through a I2C connection. Again, if you want to read from the RPI you must solder **SJ1**, **SJ2**.
 
-| SPL06 |  STM32 | 
+| DPS310 |  STM32 | 
 | :-----: | :-----: | 
 | SDA | PB9 |  
 | SCL | PB8 |  
