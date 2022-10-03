@@ -25,7 +25,7 @@ Furthermore, it manages the RPI power supply, which means you can completely shu
 **UbiOne** was designed having in mind the use of [ubiquo.net](https://ubiquo.net), a web application that allows you to control your DIY bot remotely via web browser (currently as a demo only).
 
 
-![UbiOne_v.9.8](https://github.com/Ubiqu0/UbiOne/blob/main/hardware/UbiOne_board_table_v0.9.8.png)
+![UbiOne_v.9.8](https://github.com/Ubiqu0/UbiOne/blob/main/hardware/UbiOne_board_table_v0.9.9.png)
 
 **IMPORTANT:** **UbiOne** is not yet in production! I have a working tested **prototype**, and I plan to start crowdfunding (e.g., Indiegogo) to fund the production. If you are interested, please fill out this [form](https://forms.gle/ZSxchesgbg77n8198) with your contact, and I will notify you about the campaign.  
 
@@ -134,17 +134,20 @@ UbiOne can be interfaced with the 40-pin RPI header.
 | PB8  | GPIO3 (SJ2) | 5 | I2C_SCL | 
 | PA3  | GPIO14  | 8 | UART2_RX |
 | PA2  | GPIO15  | 10 | UART2_TX |
+| PA10  | GPIO8 (SJ10)  | 24 | UART4_TX |
+| PA9  | GPIO9 (SJ11)  | 21 | UART4_RX |
 
 
 SJ* means a solder jumper.  By default, they are not connected, and therefore you need to solder it in case of use.
 
-As the table shows, **UbiOne** can communicate directly with the RPI via UART pins (GPIO14 and GPIO15). Please note that to do so, you need to first to configure the RPI:
+As the table shows, **UbiOne** can communicate directly with the RPI via UART pins (GPIO14 and GPIO15 or GPIO8 and GPIO9). Please note that to do so, you need to first to configure the RPI:
 
 1. Go to the RPI system configuration menu by typing ```sudo raspi-config``` in a terminal.
 2. Go to "**Interface Options > Serial Port**"
 3. Select "**No**" to the first question (related to login)
 4. Select "**Yes**" to the second question to enable serial
 
+5. If you want to use RPI's UART4 (RPI4 makes available aditional UART ports) available at GPIO8 and GPIO9, add ```dtoverlay=uart4``` to ```boot/config.txt``` file.
 ## mPCIe
 
 **UbiOne** can fit a Mini-PCIe card based on the pinout of a [Quectel LTE EC25 Mini PCIe](https://www.quectel.com/product/lte-ec25-mini-pcie-series). In case you use any other card, you should pay attention if it respects the same pin configuration.
