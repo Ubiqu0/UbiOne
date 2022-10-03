@@ -15,7 +15,7 @@ serial_ubione = serial.Serial(
 )
 
 LOOP_TIME = 0.05
-MAX_PULSE = 0.5
+
 
 
 # STM32F411 pinout
@@ -97,9 +97,17 @@ class Drive():
 async def run():
     driver = Drive(serial_ubione)
     with ControllerResource() as joystick:
+        MAX_PULSE = 0.5
         while joystick.connected:
-            ly,rx,triangle = joystick['ly','rx','triangle']
-
+            ly,rx,triangle,dup,ddown = joystick['ly','rx','triangle','dup','ddown']
+            if dup and dup > 0 and not ddown:
+                MAX_PULSE += 0.025
+                if MAX_PULSE >= 1:
+                    MAX_PULSE = 1
+            elif ddown and ddown > 0 and not dup:
+                MAX_PULSE -= 0.05
+                if MAX_PULSE < 0.1:
+                    MAX_PULSE = 0.1
             if ly > 0.1 or ly < -0.1:
                 driver.mv_for_back(ly*MAX_PULSE)
             else:
@@ -124,7 +132,9 @@ async def run():
 if __name__ == '__main__':
 
     result = subprocess.run(['/bin/bash', 'pair_ps4.sh'], stdout=subprocess.PIPE)
+    # print(result.stdout.decode)
     result = result.stdout.decode()
+    print(result)
     if 'already connected' in result:
         loop = asyncio.get_event_loop()
         try:
@@ -134,6 +144,3 @@ if __name__ == '__main__':
             loop.close()
     else:
         subprocess.run(['/bin/bash', 'pair_ps4.sh'], stdout=subprocess.PIPE)
-
-
-    print(result.stdout.decode())

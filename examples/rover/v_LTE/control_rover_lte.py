@@ -7,7 +7,7 @@ import serial,time
 
 #
 WS_SERVER = 'wss://ubiquo.net/ws/control/'
-DEVICE_ID = 'miguelwon-HEB1DtyhfVGV'
+DEVICE_ID = ''
 #
 serial_ubione = serial.Serial(
     port='/dev/ttyS0',
@@ -26,7 +26,7 @@ pm = {'PA0': 192,'PA1': 193,'PA2': 2,'PA3': 3,'PA4': 4,'PA5': 5,'PA6': 6,
            'PB9': 25,'PB10': 26,'PB11': 27,'PB12': 27,'PB13': 28,'PB14': 29,
            'PB15': 30,'PC13': 31,'PC14': 32,'PC15': 33,'PH0': 34,'PH1': 35}
 
-MAX_PULSE = 0.5
+MAX_PULSE = 0.4
 
 class Drive():
     def __init__(self,serial):
@@ -45,6 +45,8 @@ class Drive():
         ]
         self.write_state()
         self.state_changed = True
+        self.for_back = 0
+        self.left_right = 0.5
 
     def write_state(self):
         state = [y for x in self.state for y in x]
@@ -59,27 +61,33 @@ class Drive():
 
     def brake(self):
         bts = self.ms2bytes(1500)
+        self.for_back = 0
         self.state[0] = [15,pm['PA0']] + bts
         self.state_changed = True
 
     def mv_for_back(self,rt):
         ms = int(1500+500*rt)
+        self.for_back = rt/MAX_PULSE
         bts = self.ms2bytes(ms)
         self.state[0] = [15,pm['PA0']] + bts
         self.state_changed = True
 
     def mv_left(self):
         bts = self.ms2bytes(1800)
+        self.left_right = 0.2
         self.state[1] = [15,pm['PA1']] + bts
         self.state_changed = True
 
     def mv_right(self):
+        #fixed PWM for left
         bts = self.ms2bytes(1200)
+        self.left_right = 0.8
         self.state[1] = [15,pm['PA1']] + bts
         self.state_changed = True
 
     def mv_center(self):
         bts = self.ms2bytes(1500)
+        self.left_right = 0.5
         self.state[1] = [15,pm['PA1']] + bts
         self.state_changed = True
 
@@ -102,7 +110,6 @@ class GstApp(GSTWebRTCApp):
     async def on_data_message(self,msg):
         #message received in the data channel
         msg = json.loads(msg)
-        max_impulse = 0.4
         if 'ga_1' not in msg:
             if msg['w']['pressed'] and not msg['s']['pressed']:
                 print("received move mv_forward",time.time())
@@ -128,7 +135,7 @@ class GstApp(GSTWebRTCApp):
         if 'ga_1' in msg and msg['ga_1']['pressed']:
             ga_1 = float(msg['ga_1']['value'])
             if ga_1 < -0.1 or ga_1 > 0.1:
-                self.driver.mv_for_back(ga_1*MAX_PULSE)
+                self.driver.mv_for_back(-ga_1*MAX_PULSE)
             else:
                 self.driver.brake()
         elif 'ga_1' in msg and not msg['ga_1']['pressed']:
@@ -152,26 +159,30 @@ class GstApp(GSTWebRTCApp):
             self.driver.write_state()
 
 
-async def send_data_message(wrtc_conn):
+async def send_data_message(gst_app):
     count = 0
     while True:
-        await asyncio.sleep(1)
-        if wrtc_conn.is_data_channel_ready():
+        await asyncio.sleep(0.1)
+        if gst_app.is_data_channel_ready():
             ###########################
             ######## add your code here
             #########################
             # send dictionary with t1,t2,...,t8 as keys and the respective value with the format ['name',value]
             # If you want a progressive you can send the min and max with ['name',value,min,max]
-            signal_quality = 0
+            data = {}
+            if gst_app.driver.for_back > 0:
+                vel = 100*gst_app.driver.for_back
+                vel = int(vel)
+                data['t1'] = ['Vel',vel,0,100]
+            else:
+                data['t1'] = ['Vel',0,0,1]
 
-            data = {
-                't1':['Signal',signal_quality,0,100],
-                }
+            data['t2'] = ['Left-Right',gst_app.driver.left_right,0,1]
+
+
             ###########################
             ###########################
-
-
-            wrtc_conn.send_data_message('telemetry',data)
+            gst_app.send_data_message('telemetry',data)
 
 
 async def run():
@@ -186,6 +197,13 @@ async def run():
 
 
 if __name__ == "__main__":
+
+    import os
+    try:
+        with open('~/.asoundrc') as f:
+            pass
+    except Exception as e:
+        os.system('cp ~/.asoundrc_bck ~/.asoundrc')
 
 
     loop = asyncio.get_event_loop()
