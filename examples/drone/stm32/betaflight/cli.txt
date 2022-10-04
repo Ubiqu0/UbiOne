@@ -1,0 +1,76 @@
+Entering CLI Mode, type 'exit' to return, or 'help'
+
+#
+# Building AutoComplete Cache ... Done!
+#
+# diff
+###WARNING: NO CUSTOM DEFAULTS FOUND###
+
+# version
+# Betaflight / STM32F411 (S411) 4.4.0 Oct  3 2022 / 22:49:36 (ce0a31126) MSP API: 1.45
+###ERROR IN diff: NO CONFIG FOUND###
+# start the command batch
+batch start
+
+
+# resources
+resource BEEPER 1 B14
+resource MOTOR 1 A00
+resource MOTOR 2 A01
+resource MOTOR 3 A06
+resource MOTOR 4 A07
+resource SERIAL_TX 1 A09
+resource SERIAL_TX 2 A02
+resource SERIAL_RX 1 A10
+resource SERIAL_RX 2 A03
+resource I2C_SCL 1 B08
+resource I2C_SDA 1 B09
+resource LED 1 C13
+resource SPI_SCK 3 B03
+resource SPI_MISO 3 B04
+resource SPI_MOSI 3 B05
+resource ADC_BATT 1 B01
+resource PINIO 1 C15
+resource GYRO_EXTI 1 C14
+resource GYRO_CS 1 B12
+
+# timer
+timer B14 AF1
+# pin B14: TIM1 CH2N (AF1)
+timer A01 AF2
+# pin A01: TIM5 CH2 (AF2)
+timer A06 AF2
+# pin A06: TIM3 CH1 (AF2)
+timer A07 AF2
+# pin A07: TIM3 CH2 (AF2)
+timer A00 AF2
+# pin A00: TIM5 CH1 (AF2)
+
+# dma
+dma ADC 1 0
+# ADC 1: DMA2 Stream 0 Channel 0
+
+# serial
+serial 0 64 115200 57600 0 115200
+serial 1 1 115200 57600 0 115200
+
+# master
+set mag_bustype = I2C
+set mag_i2c_device = 1
+set baro_bustype = I2C
+set baro_i2c_device = 1
+set motor_pwm_protocol = ONESHOT125
+set battery_meter = ADC
+set vbat_scale = 122
+set vbat_multiplier = 2
+set beeper_inversion = ON
+set beeper_frequency = 2000
+set gyro_1_bustype = SPI
+set gyro_1_spibus = 3
+
+profile 0
+
+rateprofile 0
+
+# end the command batch
+batch end
