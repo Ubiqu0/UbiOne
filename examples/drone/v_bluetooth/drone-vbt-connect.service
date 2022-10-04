@@ -1,5 +1,5 @@
-\[Unit]
-Description=UbiOne-Rover-BT
+[Unit]
+Description=UbiOne-Drone-BT
 
 [Service]
 User=pi

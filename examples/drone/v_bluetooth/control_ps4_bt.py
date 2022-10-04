@@ -4,6 +4,7 @@ import asyncio
 import serial,time
 # import numpy as np
 from yamspy_async import MSPy
+import subprocess
 from approxeng.input.selectbinder import ControllerResource
 
 FC_SEND_LOOP_TIME = 0.05
@@ -13,6 +14,7 @@ DEAD_ZONE = 0.3
 
 CMDS_ORDER = ['roll', 'pitch', 'throttle', 'yaw', 'aux1', 'aux2']
 CMDS = {
+        'throttle':1000,
         'roll':     1500,
         'pitch':    1500,
         'yaw':      1500,
@@ -35,7 +37,10 @@ def stick2pwm_throttle(x):
         x = x+DEAD_ZONE
     return int(800*x)
 
+THR_DELTA = 80
+
 async def run():
+    print("Entrou")
     async with MSPy(device=serial_ubione, logfilename=None, loglevel = 'WARNING',baudrate=115200)as board:
         check_status_time = time.time()
         armed = False
@@ -46,15 +51,20 @@ async def run():
 
                 #rx -> ga_2
                 #ry -> ga_3
-                lx,ly,rx,ry,triangle,rt,lt = joystick['lx','ly','rx','ry','triangle','rt','lt']
+                lx,ly,rx,ry,triangle,r1,l1 = joystick['lx','ly','rx','ry','triangle','r1','l1']
                 throttle = ly
                 yaw = lx
                 roll = rx
                 pitch = ry
+                # if throttle > 0:
+                #     CMDS['throttle'] = 1000+stick2pwm_throttle(throttle)
+                # else:
+                #     CMDS['throttle'] = 1000
 
-                if throttle > 0:
-                    CMDS['throttle'] = 1000+stick2pwm_throttle(throttle)
-                else:
+                CMDS['throttle'] += int(THR_DELTA*throttle)
+                if CMDS['throttle'] > 1800:
+                    CMDS['throttle'] = 1800
+                if CMDS['throttle'] < 1000:
                     CMDS['throttle'] = 1000
 
                 if abs(yaw) > DEAD_ZONE:
@@ -72,9 +82,13 @@ async def run():
                 else:
                     CMDS['pitch'] = 1500
 
-                if rt > 0.9 and CMDS['aux1'] < 1500:
+                # if rt > 0.9 and CMDS['aux1'] < 1500:
+                #     CMDS['aux1'] = 1800
+                # elif lt > 0.9 and CMDS['aux1'] > 1500:
+                #     CMDS['aux1'] = 1000
+                if r1 and CMDS['aux1'] < 1500:
                     CMDS['aux1'] = 1800
-                elif lt > 0.9 and CMDS['aux1'] > 1500:
+                elif l1 and CMDS['aux1'] > 1500:
                     CMDS['aux1'] = 1000
 
                 #send cmds to FC
@@ -97,6 +111,18 @@ async def run():
                 time.sleep(FC_SEND_LOOP_TIME)
 
 
-loop = asyncio.get_event_loop()
-loop.run_until_complete(run())
-loop.close()
+
+
+if __name__ == '__main__':
+
+    result = subprocess.run(['/bin/bash', 'pair_ps4.sh'], stdout=subprocess.PIPE)
+    result = result.stdout.decode()
+    if 'already connected' in result:
+        loop = asyncio.get_event_loop()
+        try:
+            loop.run_until_complete(run())
+        except KeyboardInterrupt as e:
+            print("Caught keyboard interrupt. Canceling loop...")
+            loop.close()
+    else:
+        subprocess.run(['/bin/bash', 'pair_ps4.sh'], stdout=subprocess.PIPE)
