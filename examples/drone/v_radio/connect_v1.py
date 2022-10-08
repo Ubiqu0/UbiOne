@@ -1,25 +1,17 @@
 import asyncio
 import time,logging,json
 import serial
-import sys,re
+import sys
 sys.path.insert(0, '/home/pi/Ubiquo')
 from ubirtc.webrtc import WebRTC,GSTWebRTCApp
 from yamspy_async import MSPy
-from cellulariot import cellulariot
+import aioserial
 
 WS_SERVER = 'wss://ubiquo.net/ws/control/'
 DEVICE_ID = '' #insert your device ID
 SERIAL_UBIONE = "/dev/serial0"
 
-def parse_sig_q(response):
-    x = re.search(r'CSQ: \d+,\d+',response)
-    if x:
-        x = x.group().replace('CSQ:','').strip()
-        q = x.split(',')[0]
-        q = int(q)
-        return q
-    else:
-        return 0
+SERIAL_LTE = aioserial.AioSerial("/dev/ttyUSB1", baudrate = 115200, timeout = 0.5,rtscts=True, dsrdtr=True)
 
 class GstApp(GSTWebRTCApp):
     def __init__(self, board,*args, **kwargs):
@@ -32,8 +24,6 @@ class GstApp(GSTWebRTCApp):
 SEND_TIME_INTERVAL = 1
 async def send_data_message(gst_app):
     count = 0
-    # SERIAL_LTE = aioserial.AioSerial("/dev/ttyUSB2", baudrate = 115200, timeout = 0.5,rtscts=True, dsrdtr=True)
-    node = cellulariot.CellularIoT(serial_port="/dev/ttyUSB2")
 
     while True:
         await asyncio.sleep(SEND_TIME_INTERVAL)
@@ -51,20 +41,15 @@ async def send_data_message(gst_app):
             altitude = gst_app.board.SENSOR_DATA['altitude']
             voltage = gst_app.board.ANALOG['voltage']
 
-            node.getSignalQuality()
-            sig_q = parse_sig_q(node.response)
-
             flags= ','.join(flags)
             check_status_time = time.time()
-            print(armed,flags)
+            print(armed,flags))
 
             data = {
                 't1':['ARMED',1 if armed else 0,0,1],
                 't2':['Flags',flags],
                 't3':['altitude',altitude,0,100],
                 't4':['voltage',voltage],
-                't5':['Signal',sig_q,0,31],
-
                 }
             count+=1
 
@@ -73,7 +58,7 @@ async def send_data_message(gst_app):
 
 
 async def run():
-
+    #use custom pipeline (from USB camera)
     pipeline_str  = ''' webrtcbin name=sendrecv bundle-policy=max-bundle
     v4l2src device=/dev/video0 !
     video/x-h264,profile=constrained-baseline,width=1280,height=720,level=3.0,framerate=30/1 !
@@ -93,9 +78,10 @@ async def run():
         webrct_connection = WebRTC(
                                 DEVICE_ID,
                                 WS_SERVER,
-                                app = GstApp(board = ubione,audio = False, pipeline_str = pipeline_str)
+                                app = GstApp(board = ubione,audio = True, pipeline_str = pipeline_str)
                             )
         asyncio.ensure_future(send_data_message(webrct_connection.app))
+        asyncio.ensure_future(send_GPS_data(SERIAL_LTE,webrct_connection.app))
 
         await webrct_connection.connect()
         await webrct_connection.start()

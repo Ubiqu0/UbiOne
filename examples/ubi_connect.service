@@ -1,0 +1,12 @@
+[Unit]
+Description=Connect at boot
+
+[Service]
+User=pi
+WorkingDirectory=/home/pi/UbiOne/examples/rover/
+ExecStart=/home/pi/Ubiquo/env/bin/python /home/pi/UbiOne/examples/rover/v_LTE/control_rover_lte.py
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

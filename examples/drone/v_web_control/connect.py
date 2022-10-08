@@ -129,6 +129,7 @@ class GstApp(GSTWebRTCApp):
         #             }
         #     await self.board.reboot()
             # self.msp_status()
+
         if 'gb_1' in msg and msg['gb_1']['pressed']:
             print("reset")
             self.CMDS = {
@@ -204,6 +205,7 @@ async def fc_loop(gst_app):
 
 async def run():
 
+    #use custom pipeline (from USB camera)
     pipeline_str  = ''' webrtcbin name=sendrecv bundle-policy=max-bundle
     v4l2src device=/dev/video0 !
     video/x-h264,profile=constrained-baseline,width=1280,height=720,level=3.0,framerate=30/1 !
@@ -223,7 +225,7 @@ async def run():
         webrct_connection = WebRTC(
                                 DEVICE_ID,
                                 WS_SERVER,
-                                app = GstApp(board = ubione,audio = False, pipeline_str = pipeline_str)
+                                app = GstApp(board = ubione,audio = True, pipeline_str = pipeline_str)
                             )
         asyncio.ensure_future(fc_loop(webrct_connection.app))
 

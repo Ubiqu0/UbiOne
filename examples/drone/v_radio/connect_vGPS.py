@@ -26,6 +26,7 @@ class GstApp(GSTWebRTCApp):
 GPS_LOOP_TIME = 0.1
 async def send_GPS_data(ser,gst_app):
 
+    turn on GPS
     await ser.write_async('AT+QGPS=1\r'.encode())
 
     #declare GPS values with dummy
