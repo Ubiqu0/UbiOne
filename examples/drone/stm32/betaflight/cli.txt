@@ -14,7 +14,7 @@ batch start
 
 
 # resources
-resource BEEPER 1 B14
+resource BEEPER 1 B13
 resource MOTOR 1 A00
 resource MOTOR 2 A01
 resource MOTOR 3 A06

@@ -25,6 +25,7 @@
 #include "fc/config.h"
 #include "drivers/sound_beeper.h"
 #include "drivers/pwm_output.h"
+#include "io/piniobox.h"
 
 void targetConfiguration(void)
 {
@@ -34,4 +35,5 @@ void targetConfiguration(void)
      */
     serialConfigMutable()->portConfigs[findSerialPortIndexByIdentifier(SERIAL_PORT_USART2)].functionMask = FUNCTION_MSP;
     serialConfigMutable()->portConfigs[findSerialPortIndexByIdentifier(SERIAL_PORT_USART2)].msp_baudrateIndex = BAUD_115200;
+    pinioBoxConfigMutable()->permanentId[0] = BOX_PERMANENT_ID_USER1;
 }

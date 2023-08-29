@@ -25,14 +25,19 @@
 
 
 const timerHardware_t timerHardware[] = {
+    DEF_TIM(TIM1,   CH1N, PB13, TIM_USE_BEEPER, 0, 0), // BEEPER OUT
 
-    DEF_TIM(TIM1,   CH2N, PB14, TIM_USE_BEEPER, 0, 0), // BEEPER OUT
     DEF_TIM(TIM5,   CH1,  PA0,  TIM_USE_MC_MOTOR, 0, 0 ), // MOTOR 1
     DEF_TIM(TIM5,   CH2,  PA1,  TIM_USE_MC_MOTOR, 0, 0 ), // MOTOR 2
     DEF_TIM(TIM3,   CH1,  PA6,  TIM_USE_MC_MOTOR, 0, 0 ), // MOTOR 3
     DEF_TIM(TIM3,   CH2,  PA7,  TIM_USE_MC_MOTOR, 0, 0 ), // MOTOR 4
-    DEF_TIM(TIM1, CH1N, PB13,  TIM_USE_ANY,   0, 0), // ANY 
-    DEF_TIM(TIM1, CH3N, PB15,  TIM_USE_ANY,   0, 1), // ANY
+
+    DEF_TIM(TIM2,CH3,PB10,  TIM_USE_MC_SERVO, 0, 0),   // SERVO 1 
+
+    DEF_TIM(TIM4, CH1, PB6,  TIM_USE_ANY,   0, 0), 
+    DEF_TIM(TIM4, CH2, PB7,  TIM_USE_ANY,   0, 0), 
+    DEF_TIM(TIM1, CH1, PA8,  TIM_USE_ANY,   0, 0), 
+    DEF_TIM(TIM2, CH1, PA15,  TIM_USE_ANY,   0, 0), 
 };
 
 const int timerHardwareCount = sizeof(timerHardware) / sizeof(timerHardware[0]);
