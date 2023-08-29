@@ -181,7 +181,7 @@ You can reset the LTE module by pressing the **W_RST** or drive **PA13** pin low
 
 ## Buzzer
 
-Since **UbiOne** has a microphone, it would be nice to have a speaker. However, we think we can agree it would be pretty challenging to add a speaker to this little board. Even so, we added a small buzzer to pin **PB14** that allows playing a simple buzz and some nice tunes.  Try, for example, [this](https://github.com/Ubiqu0/UbiOne/blob/main/examples/buzzer/very_nice_tune.ino) one! :wink:
+Since **UbiOne** has a microphone, it would be nice to have a speaker. However, we think we can agree it would be pretty challenging to add a speaker to this little board. Even so, we added a small buzzer to pin **PB13** that allows playing a simple buzz and some nice tunes.  Try, for example, [this](https://github.com/Ubiqu0/UbiOne/blob/main/examples/buzzer/very_nice_tune.ino) one! :wink:
 
 ## IMU 
 
